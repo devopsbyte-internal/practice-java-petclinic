@@ -91,8 +91,8 @@ dependencies {
 // Lazy:
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperty "spring.docker.compose.enabled", "false"
     finalizedBy jacocoTestReport // ensures report is created after tests
-
 }
 
 jacoco {
