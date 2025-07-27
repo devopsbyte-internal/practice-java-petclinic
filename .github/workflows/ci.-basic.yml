@@ -3,6 +3,10 @@ name: Gradle CI
 on:
   workflow_dispatch:
   
+  push:
+    branches:
+      - main
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,11 +46,12 @@ jobs:
 
 
       - name: SonarQube Scan
-        run: ./gradlew sonarqube -- \
-          -Dsonar.host.url=${{ secrets.SONAR_CLOUD_URL }} \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+        run: |
+          ./gradlew sonarqube \
+          -Dsonar.host.url="${{ secrets.SONAR_CLOUD_URL }}" \
+          -Dsonar.login="${{ secrets.SONAR_TOKEN }}" \
+          -Dsonar.projectKey="${{ secrets.SONAR_PROJECT_KEY }}" \
+          -Dsonar.organization="${{ secrets.SONAR_ORGANIZATION }}"
 
 
 
