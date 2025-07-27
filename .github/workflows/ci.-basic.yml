@@ -40,12 +40,22 @@ jobs:
       - name: Build project
         run: ./gradlew build
 
-      # SonarQube Cloud Scan Stage
+
       - name: SonarQube Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          projectBaseDir: .
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
+        run: ./gradlew sonarqube \
+          -Dsonar.host.url=${{ secrets.SONAR_CLOUD_URL }} \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+
+
+
+      # SonarQube Cloud Scan Stage --- Stand Alone CLI Scanner not recommended.
+      # - name: SonarQube Scan
+      #   uses: SonarSource/sonarcloud-github-action@v2
+      #   with:
+      #     projectBaseDir: .
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+      #     SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
