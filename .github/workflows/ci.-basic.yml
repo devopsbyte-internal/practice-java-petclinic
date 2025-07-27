@@ -17,6 +17,18 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+          
+      - name: Check Docker and Docker Compose availability
+        run: |
+          echo "== Docker =="
+          docker --version || echo "Docker not found"
+          echo
+          echo "== Docker Compose =="
+          docker compose version || echo "Docker Compose not found"
+          echo
+          echo "== Docker Socket =="
+          ls -l /var/run/docker.sock || echo "Docker socket missing"
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
