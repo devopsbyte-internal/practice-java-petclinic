@@ -17,7 +17,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-          
+
       - name: Check Docker and Docker Compose availability
         run: |
           echo "== Docker =="
@@ -34,7 +34,7 @@ jobs:
 
       # Test Stage
       - name: Run tests
-        run: ./gradlew test -Dspring.docker.compose.enabled=false
+        run: ./gradlew test -Dspring.profiles.active=ci
 
       # Build Stage
       - name: Build project
