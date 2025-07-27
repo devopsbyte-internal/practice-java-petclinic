@@ -34,7 +34,7 @@ jobs:
 
       # Test Stage
       - name: Run tests
-        run: ./gradlew test -Dspring.profiles.active=ci
+        run: ./gradlew clean test
 
       # Build Stage
       - name: Build project
