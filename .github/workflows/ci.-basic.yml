@@ -42,7 +42,7 @@ jobs:
 
 
       - name: SonarQube Scan
-        run: ./gradlew sonarqube \
+        run: ./gradlew sonarqube -- \
           -Dsonar.host.url=${{ secrets.SONAR_CLOUD_URL }} \
           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
