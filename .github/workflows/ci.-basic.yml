@@ -22,7 +22,7 @@ jobs:
 
       # Test Stage
       - name: Run tests
-        run: ./gradlew test
+        run: ./gradlew test -Dspring.docker.compose.enabled=false
 
       # Build Stage
       - name: Build project
