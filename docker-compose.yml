@@ -1,0 +1,25 @@
+services:
+  gradle-lab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        WORKDIR_NAME: ${WORKDIR_NAME}
+    container_name: gradle-lab
+    working_dir: /${WORKDIR_NAME}
+    ports:
+      - 8080:8080
+    stdin_open: true
+    tty: true
+    # Remove volumes and just copy SRC in Docker file for copy-src-only
+    # volumes:
+    #   - ${HOST_PATH}:/${WORKDIR_NAME}
+    # volumes:
+    #   - ./build.gradle:/${WORKDIR_NAME}/build.gradle
+    #   - ./gradle.properties:/${WORKDIR_NAME}/gradle.properties
+    #   - ./settings.gradle:/${WORKDIR_NAME}/settings.gradle
+    #   - ./sonar-project.properties:/${WORKDIR_NAME}/sonar-project.properties
+    # volumes:
+      # - ./:/${WORKDIR_NAME}          # Mount host dir
+      # - /${WORKDIR_NAME}/src         # Mask src/
+      #- /${WORKDIR_NAME}/build       # Mask build/

@@ -1,0 +1,192 @@
+plugins {
+    id 'java'
+    id 'application'
+	id 'jacoco'
+	id 'maven-publish'
+    id 'org.springframework.boot' version '3.5.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.sonarqube' version '4.4.1.3373'
+    id 'org.graalvm.buildtools.native' version '0.10.6'
+    id 'org.cyclonedx.bom' version '2.3.1'
+    id 'io.spring.javaformat' version '0.0.46'
+    id "io.spring.nohttp" version "0.0.11"
+}
+
+group = 'org.springframework.samples'
+version = '1.0.0'
+description = 'Spring PetClinic Application'
+
+
+// This representation is "Configuring -Extension" - Not Task. So tasks.named/getByName/withType cannot be used.
+java {
+
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+
+toolchain {
+         languageVersion = JavaLanguageVersion.of(17)
+}
+}
+
+
+application {
+    mainClass = 'org.springframework.samples.petclinic.PetClinicApplication'
+}
+
+repositories {
+    mavenCentral()
+}
+
+// ext.checkstyleVersion = "10.25.0"
+// ext.springJavaformatCheckstyleVersion = "0.0.46"
+// ext.webjarsLocatorLiteVersion = "1.1.0"
+// ext.webjarsFontawesomeVersion = "4.7.0"
+// ext.webjarsBootstrapVersion = "5.3.6"
+ext {
+    checkstyleVersion                  = "10.25.0"
+    springJavaformatCheckstyleVersion  = "0.0.46"
+    webjarsLocatorLiteVersion          = "1.1.0"
+    webjarsFontawesomeVersion          = "4.7.0"
+    webjarsBootstrapVersion            = "5.3.6"
+
+}
+
+dependencies {
+    // Workaround for AOT issue (https://github.com/spring-projects/spring-framework/pull/33949) -->
+    implementation 'io.projectreactor:reactor-core'
+
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'javax.cache:cache-api'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
+    runtimeOnly 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly "org.webjars:webjars-locator-lite:${webjarsLocatorLiteVersion}"
+    runtimeOnly "org.webjars.npm:bootstrap:${webjarsBootstrapVersion}"
+    runtimeOnly "org.webjars.npm:font-awesome:${webjarsFontawesomeVersion}"
+    runtimeOnly 'com.github.ben-manes.caffeine:caffeine'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'org.postgresql:postgresql'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.springframework.boot:spring-boot-docker-compose'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql'
+    checkstyle "io.spring.javaformat:spring-javaformat-checkstyle:${springJavaformatCheckstyleVersion}"
+    checkstyle "com.puppycrawl.tools:checkstyle:${checkstyleVersion}"
+}
+
+
+// This representation can be done as it's a task not plugin-configuration
+// Eager:
+// test {
+//     useJUnitPlatform()
+//     finalizedBy jacocoTestReport // ensures report is created after tests
+
+// }
+// Lazy:
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // ensures report is created after tests
+
+}
+
+jacoco {
+    toolVersion = '0.8.11' // or latest
+}
+
+
+jacocoTestReport {
+    dependsOn test // tests must run before report is generated
+
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}
+
+println "Resolved sonarProjectKey: ${project.sonarProjectKey}"
+
+// Using gradle.properties
+sonarqube {
+    properties {
+        property "sonar.host.url", project.sonarHost
+        property "sonar.login", project.sonarToken
+        property "sonar.projectKey", project.sonarProjectKey
+        // property "sonar.projectName", project.sonarProjectName
+        // property "sonar.projectVersion", project.sonarProjectVersion
+        // property "sonar.language", project.sonarLanguage
+        // property "sonar.sources", project.sonarSources
+        // property "sonar.tests", project.sonarTests
+        // property "sonar.sourceEncoding", project.sonarEncoding
+        // property "sonar.java.binaries", project.sonarBinaries
+        // property "sonar.coverage.jacoco.xmlReportPaths", project.jacocoXmlPath
+
+    }
+}
+
+// Build.gradle Only properties:
+// sonarqube {
+//     properties {
+//         property "sonar.host.url", System.getenv("SONAR_HOST_URL") ?: "http://localhost:9000"
+//         property "sonar.login", System.getenv("SONAR_TOKEN") ?: "your_token_here"
+//         property "sonar.projectKey", "spring-petclinic"
+//         property "sonar.projectName", "Spring PetClinic"
+//         property "sonar.projectVersion", "1.0"
+//         property "sonar.sources", "src/main/java"
+//         property "sonar.tests", "src/test/java"
+//         property "sonar.sourceEncoding", "UTF-8"
+//         property "sonar.java.binaries", "${buildDir}/classes"
+// 		property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+
+//     }
+// }
+
+checkstyle {
+  configDirectory = project.file('src/checkstyle')
+  configFile = file('src/checkstyle/nohttp-checkstyle.xml')
+}
+
+checkstyleNohttp {
+  configDirectory = project.file('src/checkstyle')
+  configFile = file('src/checkstyle/nohttp-checkstyle.xml')
+
+  setSource('src') // Scan everything but exclude gradle.properties; since has http://
+  exclude '**/gradle.properties'
+}
+
+
+// Build successful without these:
+// tasks.named("formatMain").configure { dependsOn("checkstyleMain") }
+// tasks.named("formatMain").configure { dependsOn("checkstyleNohttp") }
+
+// tasks.named("formatTest").configure { dependsOn("checkstyleTest") }
+// tasks.named("formatTest").configure { dependsOn("checkstyleNohttp") }
+
+
+// Build successful without these:
+// Can use the Lazy -or- Eager configurations of above Task-Property reference
+// checkstyleAot.enabled = false
+// checkstyleAotTest.enabled = false
+// formatAot.enabled = false
+// formatAotTest.enabled = false
+
+
+
+// Variable style Task-Property reference - Not order safe; have to come after Plugins.
+// checkFormatAot.enabled = false
+// checkFormatAotTest.enabled = false
+
+// Lazy lookup, order‐safe (preferred)
+tasks.named("checkFormatAot")     { enabled = false }
+tasks.named("checkFormatAotTest") { enabled = false }
+
+// Or eager lookup, must come *after* the plugin is applied
+// tasks.getByName("checkFormatAot").enabled     = false
+// tasks.getByName("checkFormatAotTest").enabled = false
+
