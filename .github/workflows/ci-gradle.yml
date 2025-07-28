@@ -95,14 +95,8 @@ jobs:
 
       - name: Verify report download
         run: |
-          echo "PWD: $(pwd)"          
-          mkdir -p build/reports/jacoco/test/
-          echo "Build Dir before Move:"
-          ls build/reports/jacoco/test/
-          mv jacocoTestReport.xml build/reports/jacoco/test/
-          echo "Build Dir after Move:"
-          ls build/reports/jacoco/test/
-          ls build/
+          echo "PWD: $(pwd)"
+          ls
         
 
 
@@ -113,25 +107,8 @@ jobs:
           -Dsonar.login="${{ secrets.SONAR_TOKEN }}" \
           -Dsonar.projectKey="${{ secrets.SONAR_PROJECT_KEY }}" \
           -Dsonar.organization="${{ secrets.SONAR_ORGANIZATION }}" \
-        # -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+          -Dsonar.coverage.jacoco.xmlReportPaths=jacocoTestReport.xml
 
-
-      - name: Verify Dir for Sonar after Scan
-        run: |
-          echo "PWD: $(pwd)"
-          echo "Checking build dir:"
-          ls -lh build/ || echo "No build directory found"
-          echo "Checking reports dir:"
-          ls -lh build/reports || echo "No build/reports directory found"
-          ls -lh build/reports/jacoco || echo "No build/reports/jacoco directory found"
-          ls -lh build/reports/jacoco/test || echo "No build/reports/jacoco/test directory found"
-          echo "Checking build/classes/java folder:"
-          ls -lh build/classes/java || echo "No java classes directory found"
-          echo "Checking build/classes/java/main classes:"
-          ls -lh build/classes/java/main/org/springframework/samples/petclinic/ || echo "No main classes directory found"
-          echo "Checking build/classes/java/test classes:"
-          ls -lh build/classes/java/test/org/springframework/samples/petclinic/ || echo "No test classes directory found"
-          
 
       # SonarQube Cloud Scan Stage --- Stand Alone CLI Scanner not recommended.
       # - name: SonarQube Scan
