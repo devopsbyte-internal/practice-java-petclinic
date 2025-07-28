@@ -95,7 +95,8 @@ jobs:
 
       - name: Verify report download
         run: |
-          ls
+          ls -la
+          mkdir -p /build/reports/jacoco/test/
           ls /build/reports/jacoco/test/
           mv ./jacocoTestReport.xml /build/reports/jacoco/test/
           ls /build/reports/jacoco/test/
