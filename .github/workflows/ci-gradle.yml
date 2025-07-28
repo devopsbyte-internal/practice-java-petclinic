@@ -56,7 +56,7 @@ jobs:
         run: ./gradlew build
 
 
-    scan:
+  scan:
     runs-on: ubuntu-latest
     needs: test
     steps:
