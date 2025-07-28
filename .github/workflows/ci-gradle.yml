@@ -112,7 +112,7 @@ jobs:
           -Dsonar.login="${{ secrets.SONAR_TOKEN }}" \
           -Dsonar.projectKey="${{ secrets.SONAR_PROJECT_KEY }}" \
           -Dsonar.organization="${{ secrets.SONAR_ORGANIZATION }}"
-          -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+        # -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
 
       # SonarQube Cloud Scan Stage --- Stand Alone CLI Scanner not recommended.
       # - name: SonarQube Scan
