@@ -102,6 +102,7 @@ jobs:
           mv jacocoTestReport.xml build/reports/jacoco/test/
           echo "Build Dir after Move:"
           ls build/reports/jacoco/test/
+          ls build/
         
 
 
