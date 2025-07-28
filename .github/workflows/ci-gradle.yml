@@ -79,8 +79,8 @@ jobs:
 
 
       - name: Download coverage reports
-          uses: actions/download-artifact@v4
-          with:
+        uses: actions/download-artifact@v4
+        with:
             name: coverage_reports
 
       - name: SonarQube Scan
