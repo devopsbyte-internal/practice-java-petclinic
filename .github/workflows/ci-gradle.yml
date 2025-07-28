@@ -98,9 +98,10 @@ jobs:
           ls -la
           pwd
           mkdir -p build/reports/jacoco/test/
-          ls /build/reports/jacoco/test/
-          mv jacocoTestReport.xml /build/reports/jacoco/test/
-          ls /build/reports/jacoco/test/
+          ls -la
+          ls build/reports/jacoco/test/
+          mv jacocoTestReport.xml build/reports/jacoco/test/
+          ls build/reports/jacoco/test/
         
 
 
