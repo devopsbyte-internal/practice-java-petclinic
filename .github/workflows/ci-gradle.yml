@@ -101,7 +101,7 @@ jobs:
           ls build/reports/jacoco/test/
           mv jacocoTestReport.xml build/reports/jacoco/test/
           echo "Build Dir after Move:"
-          ls build/reports/jacoco/test/
+          ls build/reports/jacoco/tes/
         
 
 
@@ -118,8 +118,8 @@ jobs:
       - name: Verify Dir for Sonar after Scan
         run: |
           echo "PWD: $(pwd)"
-          echo "Checking jacocoreport path:"
-          ls -lh build/reports/jacoco/test/         
+          echo "Checking build dir:"
+          ls -lh build/         
           echo "Checking build/classes/java folder:"
           ls -lh build/classes/java
           echo "Checking build/classes/java/main classes:"
