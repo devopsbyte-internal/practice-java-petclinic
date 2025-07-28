@@ -89,11 +89,11 @@ jobs:
             name: coverage_reports
             path: .
 
-      - name: Extract downloaded zip
-        run: unzip -o coverage_reports.zip -d .
+      # - name: Extract downloaded zip
+      #   run: unzip -o coverage_reports.zip -d .
 
       - name: Verify report download
-        run: ls -R coverage_reports
+        run: ls
         #ls -lh build/reports/jacoco/test/jacocoTestReport.xml
 
 
