@@ -1,4 +1,4 @@
-name: Gradle CI - Self Hosted
+name: Gradle CI - Self Hosted - Sonor io
 
 on:
   workflow_dispatch:
