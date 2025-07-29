@@ -1,4 +1,4 @@
-name: CI Pipeline (Self-Hosted)
+name: Gradle CI - Self Hosted
 
 on:
   workflow_dispatch:
@@ -12,6 +12,7 @@ on:
     branches:
       - main
 
+# To cancel duplicate same workflow run on same branch
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -20,6 +21,7 @@ jobs:
   test:
     runs-on: self-hosted
     name: Run Tests
+    # To segragate working dir for each job run
     defaults:
       run:
         working-directory: repo-${{ github.run_id }}
@@ -46,15 +48,16 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage_reports
-          path: build/reports/jacoco/test/jacocoTestReport.xml
+          path: repo-${{ github.run_id }}/build/reports/jacoco/test/jacocoTestReport.xml
 
+        # Referencing report folders + github environment variables 
       - name: Validate reports
         run: |
           echo "Workspace: $(pwd)"
           ls -lh build/reports/jacoco/test/
           ls -lh build/jacoco/test.exec || true
-          ls {{ github.workspace }} || true
-          ls repo-${{ github.run_id }} || true
+          ls $GITHUB_WORKSPACE || true
+          ls $GITHUB_WORKSPACE/repo-${GITHUB_RUN_ID} || true
 
       - name: Cleanup workspace
         if: always()

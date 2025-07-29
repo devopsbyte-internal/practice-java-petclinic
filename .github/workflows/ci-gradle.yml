@@ -1,4 +1,4 @@
-name: Gradle CI - Self Hosted Runner
+name: Gradle CI - GitHub Runner
 
 on:
   workflow_dispatch:
@@ -8,9 +8,9 @@ on:
       required: true
       default: 'Manual Gradle CI run'
 
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   
 jobs:
   test:
