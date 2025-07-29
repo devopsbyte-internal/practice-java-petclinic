@@ -120,7 +120,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: coverage_reports
-          path: .
+          path: ./repo-${{ github.run_id }}
 
       - name: Debug downloaded files
         run: |
