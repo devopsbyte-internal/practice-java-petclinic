@@ -1,4 +1,4 @@
-name: Gradle CI
+name: Gradle CI - Self Hosted Runner
 
 on:
   workflow_dispatch:
